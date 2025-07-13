@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Search from './components/Search';
 import CardList from './components/CardList';
 import ErrorBoundary from './components/ErrorBoundary';
