@@ -1,14 +1,13 @@
 export type PokemonListResponse = {
-    results: {
-      name: string;
-      url: string;
-    }[];
-  };
-  
-  export type PokemonDetail = {
-    id: number;
+  results: {
     name: string;
-    height: number;
-    [key: string]: any;
-  };
-  
+    url: string;
+  }[];
+};
+
+export type PokemonDetail = {
+  id: number;
+  name: string;
+  height: number;
+  [key: string]: unknown;
+};

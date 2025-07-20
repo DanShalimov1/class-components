@@ -7,8 +7,8 @@ type AppState = {
   searchTerm: string;
 };
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
+class App extends Component<Record<string, never>, AppState> {
+  constructor(props: Record<string, never>) {
     super(props);
     const savedSearch = localStorage.getItem('searchTerm') || '';
     this.state = {
@@ -27,7 +27,10 @@ class App extends Component<{}, AppState> {
       <div className="max-w-4xl mx-auto p-4">
         <ErrorBoundary>
           <div className="bg-white p-4 shadow rounded mb-4">
-            <Search onSearch={this.handleSearch} defaultValue={this.state.searchTerm} />
+            <Search
+              onSearch={this.handleSearch}
+              defaultValue={this.state.searchTerm}
+            />
           </div>
           <div className="bg-white p-4 shadow rounded">
             <CardList searchTerm={this.state.searchTerm} />
@@ -42,7 +45,6 @@ class App extends Component<{}, AppState> {
               Error Button
             </button>
           </div>
-
         </ErrorBoundary>
       </div>
     );
