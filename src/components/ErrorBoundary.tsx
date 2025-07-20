@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 
 type Props = {
@@ -15,7 +15,7 @@ class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(_: Error) {
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
@@ -30,8 +30,8 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="text-red-600 text-center">
-          <p>Something went wrong. Please refresh the page.</p>
+        <div className="text-center text-red-600">
+          <h1>Something went wrong.</h1>
         </div>
       );
     }
@@ -41,8 +41,8 @@ class ErrorBoundary extends Component<Props, State> {
         {this.props.children}
         <div className="text-center mt-4">
           <button
-            onClick={this.throwError}
             className="bg-red-600 text-white px-4 py-2 rounded"
+            onClick={this.throwError}
           >
             Trigger Error
           </button>
