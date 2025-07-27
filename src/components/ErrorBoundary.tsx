@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import type { ErrorInfo, ReactNode } from 'react';
-
+import type { ErrorInfo, ReactNode } from 'react'; 
+//comment just to make the pull request option show up
 type Props = {
   children: ReactNode;
 };

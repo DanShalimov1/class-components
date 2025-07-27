@@ -1,50 +1,43 @@
-import { Component } from 'react';
-import type { ChangeEvent } from 'react';
+import React, { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 
 type SearchProps = {
   onSearch: (term: string) => void;
   defaultValue: string;
 };
 
-type SearchState = {
-  input: string;
-};
+const Search: React.FC<SearchProps> = ({ onSearch, defaultValue }) => {
+  const [input, setInput] = useState(defaultValue || '');
 
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = { input: props.defaultValue || '' };
-  }
-
-  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ input: e.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
   };
 
-  render() {
-    return (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          this.props.onSearch(this.state.input.trim());
-        }}
-        className="flex gap-2 mb-4 justify-center"
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSearch(input.trim());
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex gap-2 mb-4 justify-center"
+    >
+      <input
+        className="border p-2 rounded w-1/2"
+        type="text"
+        placeholder="Search..."
+        value={input}
+        onChange={handleChange}
+      />
+      <button
+        type="submit"
+        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
       >
-        <input
-          className="border p-2 rounded w-1/2"
-          type="text"
-          placeholder="Search..."
-          value={this.state.input}
-          onChange={this.handleChange}
-        />
-        <button
-          type="submit"
-          className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Search
-        </button>
-      </form>
-    );
-  }
-}
+        Search
+      </button>
+    </form>
+  );
+};
 
 export default Search;
