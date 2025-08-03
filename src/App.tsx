@@ -1,52 +1,29 @@
-import React, { Component } from 'react';
-import Search from './components/Search';
-import CardList from './components/CardList';
-import ErrorBoundary from './components/ErrorBoundary';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import Details from './pages/Details';
+import About from './pages/About';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import ThemeToggle from './components/ThemeToggle';
 
-type AppState = {
-  searchTerm: string;
-};
+const App: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useLocalStorage<string>('searchTerm', '');
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    const savedSearch = localStorage.getItem('searchTerm') || '';
-    this.state = {
-      searchTerm: savedSearch,
-    };
-  }
-
-  handleSearch = (term: string) => {
-    const trimmed = term.trim();
-    localStorage.setItem('searchTerm', trimmed);
-    this.setState({ searchTerm: trimmed });
-  };
-
-  render() {
-    return (
-      <div className="max-w-4xl mx-auto p-4">
-        <ErrorBoundary>
-          <div className="bg-white p-4 shadow rounded mb-4">
-            <Search onSearch={this.handleSearch} defaultValue={this.state.searchTerm} />
-          </div>
-          <div className="bg-white p-4 shadow rounded">
-            <CardList searchTerm={this.state.searchTerm} />
-          </div>
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => {
-                throw new Error('Test error');
-              }}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            >
-              Error Button
-            </button>
-          </div>
-
-        </ErrorBoundary>
+  return (
+    <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
+      <div className="p-4">
+        <ThemeToggle />
       </div>
-    );
-  }
-}
+
+      <Routes>
+        <Route path="/" element={<Home searchTerm={searchTerm} onSearch={setSearchTerm} />} />
+        <Route path="/pokemon/:name" element={<Details />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default App;
