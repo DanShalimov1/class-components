@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Card from './Card';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store';
+import { useNavigate } from 'react-router-dom';
 
 type Pokemon = {
   name: string;
@@ -20,13 +23,12 @@ const CardList: FC<Props> = ({ searchTerm, page, onPageChange }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const handleSelect = (name: string) => {
-    searchParams.set('details', name);
-    setSearchParams(searchParams, { replace: true });
-  };
+  const selectedNames = useSelector((state: RootState) => state.selected.selected);
 
   const detailPanel = document.getElementById('detail-panel');
   detailPanel?.scrollIntoView({ behavior: 'smooth' });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,9 +95,6 @@ const CardList: FC<Props> = ({ searchTerm, page, onPageChange }) => {
     return <p>Loading...</p>;
   }
 
-
-
-
   return (
     <>
       <div className="grid grid-cols-2 gap-4">
@@ -105,7 +104,13 @@ const CardList: FC<Props> = ({ searchTerm, page, onPageChange }) => {
             name={pokemon.name}
             description="Click to see details"
             image={pokemon.image}
-            onSelect={handleSelect}
+            selected={selectedNames.some(item => item.name === pokemon.name)}
+            onClick={(name) => {
+              const params = new URLSearchParams(searchParams);
+              params.set('details', name);
+              console.log('Setting details param to:', name);
+              setSearchParams(params);
+            }}
           />
         ))}
       </div>
